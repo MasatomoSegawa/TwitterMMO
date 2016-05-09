@@ -18,8 +18,21 @@ public class MainLogic : MonoBehaviour {
 
 		parameter.Add("count", count.ToString());
 
+		if (Utillity.isExistFile (Utillity.resourcesPath + "/UserInfo/") == true) {
+		
+			print (System.IO.File.Exists (Utillity.resourcesPath + "UserInfo/shibainu_bot114.json"));
 
-		TwitterPluginManager.Instance.OnGetRequestToken ();
+			TextAsset ta = Resources.Load("UserInfo/shibainu_bot114") as TextAsset; 
+
+			TwitterUserInfo tUI = JsonUtility.FromJson<TwitterUserInfo> (ta.text);
+
+			TwitterPluginManager.Instance.LoadTwitterUserInfo (tUI);
+
+			OnGetHomeTimeLineButton ();
+
+		} else {
+			TwitterPluginManager.Instance.OnGetRequestToken ();
+		}
         
     }
 
@@ -33,9 +46,7 @@ public class MainLogic : MonoBehaviour {
 	}
 
 	public void OnEndEdit(){
-
-		Debug.Log ("あれ〜？");
-
+	
 		TwitterPluginManager.Instance.OnPinInput (inputField.text, OnEndPin);
 
 	}

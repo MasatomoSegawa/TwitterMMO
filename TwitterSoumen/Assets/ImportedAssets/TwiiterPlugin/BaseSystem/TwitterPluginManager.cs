@@ -23,6 +23,9 @@ using System.IO;
 public class TwitterPluginManager : Singleton<TwitterPluginManager>
 {
 
+	[Header("ユーザー情報を保存するResourcesからのパス.")]
+	public string userInfoSavePath;
+
     // 認証が終わった際に呼び出されるイベント.
     public delegate void OnRegisterAccessTokenEnd(bool success);
     public event OnRegisterAccessTokenEnd OnRegisterAccessTokenEndEvent;
@@ -66,20 +69,27 @@ public class TwitterPluginManager : Singleton<TwitterPluginManager>
 
     void Start()
     {
-        LoadTwitterUserInfo();
+		//LoadTwitterUserInfo();
     }
 
     /// <summary>
     /// ユーザーデータをロードする.
     /// </summary>
-    void LoadTwitterUserInfo()
+	public void LoadTwitterUserInfo(TwitterUserInfo twitterUserInfo)
     {
         m_AccessTokenResponse = new Twitter.AccessTokenResponse();
 
+		m_AccessTokenResponse.UserId = twitterUserInfo.userId;
+		m_AccessTokenResponse.ScreenName = twitterUserInfo.screenName;
+		m_AccessTokenResponse.Token = twitterUserInfo.token;
+		m_AccessTokenResponse.TokenSecret = twitterUserInfo.tokenSecret;
+
+		/*
         m_AccessTokenResponse.UserId = PlayerPrefs.GetString(PLAYER_PREFS_TWITTER_USER_ID);
         m_AccessTokenResponse.ScreenName = PlayerPrefs.GetString(PLAYER_PREFS_TWITTER_USER_SCREEN_NAME);
         m_AccessTokenResponse.Token = PlayerPrefs.GetString(PLAYER_PREFS_TWITTER_USER_TOKEN);
         m_AccessTokenResponse.TokenSecret = PlayerPrefs.GetString(PLAYER_PREFS_TWITTER_USER_TOKEN_SECRET);
+		*/
 
         AccessToken = m_AccessTokenResponse.Token;
         AccessTokenSecret = m_AccessTokenResponse.TokenSecret;
@@ -140,10 +150,26 @@ public class TwitterPluginManager : Singleton<TwitterPluginManager>
 
             m_AccessTokenResponse = response;
 
+			TwitterUserInfo twitterUserInfo = new TwitterUserInfo ();
+			twitterUserInfo.userId = response.UserId;
+			twitterUserInfo.screenName = response.ScreenName;
+			twitterUserInfo.token = response.Token;
+			twitterUserInfo.tokenSecret = response.TokenSecret;
+
+			string json = JsonUtility.ToJson (twitterUserInfo);
+
+			Utillity.SaveJsonFile (
+				Utillity.resourcesPath + userInfoSavePath,
+				twitterUserInfo.screenName,
+				json
+			);
+
+			/*
             PlayerPrefs.SetString(PLAYER_PREFS_TWITTER_USER_ID, response.UserId);
             PlayerPrefs.SetString(PLAYER_PREFS_TWITTER_USER_SCREEN_NAME, response.ScreenName);
             PlayerPrefs.SetString(PLAYER_PREFS_TWITTER_USER_TOKEN, response.Token);
             PlayerPrefs.SetString(PLAYER_PREFS_TWITTER_USER_TOKEN_SECRET, response.TokenSecret);
+			*/
 
         }
         else

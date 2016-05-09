@@ -107,7 +107,7 @@ public class TwitterJsonManager : Singleton<TwitterJsonManager> {
         string SaveName = "myHomeTimeLine";
         StreamWriter sw;
         FileInfo fi;
-        fi = new FileInfo(Application.dataPath + "/Scenes/Main/Resources/TimeLine/" + "myHomeTimeLine" + ".json");
+		fi = new FileInfo(Utillity.resourcesPath + "TimeLine/" + "myHomeTimeLine" + ".json");
         sw = fi.AppendText();
         sw.WriteLine(data);
         sw.Flush();

@@ -734,6 +734,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a72b1f804e7c74f82777bbe924636e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInfoSavePath: UserInfo/
   CONSUMER_KEY: 3DHFRJA2ndqESgBHjD5JeJH4e
   CONSUMER_SECRET: pdpXY4kSu09LuxFguonZcwcmnMZ54hacdCzdWZwrzHQ0uyaNC2
   AccessToken: 3008950243-g2pcss79eIvoEDydm7OUctxgyhyhEUs5Y2kbMpj
