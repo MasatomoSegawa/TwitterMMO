@@ -1,94 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.UI;
+using System.Collections;
 
-public class MainLogic : MonoBehaviour {
+public class MainLogic: MonoBehaviour {
 
-    public int count = 2;
 
-    Dictionary<string, string> parameter;
-
-	public InputField inputField;
-
-    void Start()
-    {
-
-		parameter = new Dictionary<string, string>();
-
-		parameter.Add("count", count.ToString());
-
-		if (Utillity.isExistFile (Utillity.resourcesPath + "/UserInfo/") == true) {
-		
-			print (System.IO.File.Exists (Utillity.resourcesPath + "UserInfo/shibainu_bot114.json"));
-
-			TextAsset ta = Resources.Load("UserInfo/shibainu_bot114") as TextAsset; 
-
-			TwitterUserInfo tUI = JsonUtility.FromJson<TwitterUserInfo> (ta.text);
-
-			TwitterPluginManager.Instance.LoadTwitterUserInfo (tUI);
-
-			OnGetHomeTimeLineButton ();
-
-		} else {
-			TwitterPluginManager.Instance.OnGetRequestToken ();
-		}
-        
-    }
-
-	public void OnEndPin(bool isSucces){
-
-		if (isSucces == true) {
-			OnGetHomeTimeLineButton ();
-		} else {
-			Debug.Log ("失敗");
-		}
-	}
-
-	public void OnEndEdit(){
-	
-		TwitterPluginManager.Instance.OnPinInput (inputField.text, OnEndPin);
-
-	}
-
-    /// <summary>
-    /// HomeTimeLineを取得するボタンを押された時に呼び出される.
-    /// </summary>
-    public void OnGetHomeTimeLineButton()
-    {
-
-        parameter.Clear();
-        parameter.Add("count", count.ToString());
-
-        TwitterPluginManager.Instance.OnGet_Home_TimeLine(OnHomeGetTimeLine,parameter);
-
-    }
-
-    /// <summary>
-    /// ここにツイートそうめんが入ってくる.
-    /// </summary>
-    /// <param name="tweetSoumens"></param>
-    void GetSoumenTweetObjects(TweetObject[] tweetSoumens)
-    {
-
-          
-    }
-
-    void OnHomeGetTimeLine(bool success, string data)
-    {
-
-        if (success == true)
-        {
-            Debug.Log("Success - GetTimeLine");
-            Debug.Log(data);
-
-            TwitterJsonManager.Instance.CreateTweetSoumen(data, GetSoumenTweetObjects);
-        }
-        else
-        {
-            Debug.Log("Failed - GetTimeLine");
-        }
-
-    }
+    
 
 }
